@@ -1,0 +1,35 @@
+# Rivo FX
+
+> Rivo FX is a free, MIT-licensed FiveM library for Lua 5.4 and JavaScript/TypeScript with typed errors, fibers, scopes, Layers and Schema (the Effect model), plus validated net events, typed RPC, asset loading, entities, state bags, KVP, oxmysql, frameworks (ESX, QBCore, Qbox), NUI, streams, metrics, tracing and in-game devtools.
+
+Resources load it with `shared_script '@rivo_fx/init.lua'` and use the global `Fx`. JS/TS resources use the npm package `@rivolabs/fx` on top of `effect`. Every reference page has one heading per function with its signature, parameters, return value, errors and an example.
+
+## Docs
+
+- [Introduction](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/introduction.md): Rivo FX is a free, MIT-licensed library for FiveM resources, in Lua 5.4 and in JavaScript/TypeScript.
+- [Getting started](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/getting-started.md): This page takes a resource from nothing to a validated net event and a typed RPC, and lists every setting Rivo FX reads: convars, ACE permissions and editor types.
+- [Effects](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/core-effects.md): This page covers building effects, chaining them, writing them in direct style with `Fx.gen`, working with time, and running them.
+- [Errors and causes](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/core-errors.md): This page covers typed errors (`Fx.TaggedError`), the operators that recover from or transform errors, the difference between failures, defects and interruptions, and the `Fx.Cause` and `Fx.Exit` values that describe how an effect ended.
+- [Concurrency](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/core-concurrency.md): This page covers fibers (fork, join, interrupt), running many effects at once with `Fx.forEach`, `Fx.all` and races, uninterruptible regions, and the shared-state tools: `Ref`, `Deferred`, `Semaphore`, `Queue` and `PubSub`.
+- [Scopes, services and Layers](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/core-resources.md): This page covers resource safety (scopes, finalizers, `acquireRelease`, resource-stop cleanup) and dependency injection (service tags, Layers, Runtimes).
+- [Schedule](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/core-schedule.md): This page covers `Fx.Schedule`, the policies that decide how often and with what delay an effect is retried after a failure (`eff:retry`) or repeated after a success (`eff:repeatWith`).
+- [Schema](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/core-schema.md): This page covers `Fx.S` (also available as `Fx.Schema`), runtime validation for anything that crosses a trust boundary: net event payloads, RPC input and output, NUI messages, convars, config files, KVP and state bags.
+- [Streams](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/streams.md): `Fx.Stream` describes zero or more values over time: game events, net events, state bag changes, security events, timers, queues.
+- [Metrics, tracing and logs](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/observability.md): Rivo FX records spans around effects, keeps counters, gauges and histograms per resource, and writes levelled logs that carry the current trace.
+- [Devtools (/fxdev)](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/devtools.md): `/fxdev` is an in-game view of every resource that uses Rivo FX, on the server and on your own client: live fibers, traces, failures and metrics.
+- [Net events and RPC](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/net-rpc.md): `Fx.net` registers net events that validate their payload against a schema and rate limit each player before your handler runs.
+- [Players, config, assets, entities, ticks](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/fivem-modules.md): This page covers the Rivo FX modules that wrap FiveM's game and server lifecycle: per-player scopes (`Fx.player`), resource stop (`Fx.onStop`, `Fx.resourceScope`), typed convars and config files (`Fx.config`), streamed asset loading (`Fx.assets`), entities (`Fx.entity`) and frame loops (`Fx.tick`).
+- [KVP, state bags, database, frameworks](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/data.md): This page covers the modules that store and read data: resource KVP (`Fx.kvp`), state bags (`Fx.state`), oxmysql (`Fx.db`) and the player, money and job API over ESX, QBCore, Qbox and standalone (`Fx.framework`).
+- [NUI](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/nui.md): This page covers typed NUI: the Lua side `Fx.nui` in a client script, and the page side `@rivolabs/fx-nui`, a dependency-free TypeScript package for the browser page (React, Svelte, Vue or plain JS).
+- [JavaScript and TypeScript (@rivolabs/fx)](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/js.md): `@rivolabs/fx` brings Rivo FX to FiveM JavaScript and TypeScript resources, built on the real [`effect`](https://effect.website) package (version 4).
+- [CLI (rivo-fx)](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/cli.md): `@rivolabs/fx-cli` installs the `rivo-fx` command.
+- [Recipes](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/recipes.md): Ten complete solutions to common FiveM tasks, written with the Rivo FX Lua API.
+- [Errors and gotchas](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/reference/errors.md): This page lists every error tag the Rivo FX Lua library and the JS packages produce, with the module it comes from, when it happens, its fields and how to handle it.
+- [Moving a resource to Rivo FX](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/MIGRATING.md): You do not have to rewrite anything up front.
+
+## Optional
+
+- [Full reference in one file](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/llms-full.md): every page above, in order
+- [Wire protocol](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/docs/PROTOCOL.md): the RPC and net event format shared by Lua and JS
+- [Type definitions](https://raw.githubusercontent.com/RivoLabs/rivo_fx/main/types/rivo_fx.lua): LuaLS annotations for the whole Lua API
+- [Website docs](https://rivo.software/docs/products/rivo-fx/introduction)

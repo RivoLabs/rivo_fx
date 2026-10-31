@@ -27,5 +27,6 @@ CI runs all of these on every pull request.
 - Keep the Lua and JS sides speaking the same protocol ([docs/PROTOCOL.md](docs/PROTOCOL.md)). A change to one needs the other.
 - Match the surrounding code: its naming, its comment density, and LuaLS annotations for public Lua API (`types/rivo_fx.lua`).
 - Add a line to [CHANGELOG.md](CHANGELOG.md) for anything users will notice.
+- Public API changes update the reference page in [docs/reference](docs/reference), then `node scripts/build-docs.mjs` to regenerate `llms.txt` and `llms-full.md` (CI checks they match).
 
 By contributing, you agree your work is released under the [MIT license](LICENSE).

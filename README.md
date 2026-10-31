@@ -20,6 +20,10 @@ often:
 Free and MIT licensed. Lua 5.4, FiveM. In-game devtools (`/fxdev`), metrics
 and tracing included.
 
+**Docs:** [rivo.software/docs/products/rivo-fx](https://rivo.software/docs/products/rivo-fx/introduction),
+also in [docs/reference](docs/reference). For AI assistants: [llms.txt](llms.txt)
+and the whole reference in one file, [llms-full.md](llms-full.md).
+
 ## Install
 
 1. Download `rivo_fx.zip` from the [latest release](https://github.com/RivoLabs/rivo_fx/releases/latest),

@@ -52,8 +52,10 @@ Success: `{ id = 1, ok = true, value = <output> }`.
 Failure: `{ id = 1, ok = false, error = { _tag = "SomeTag", ...fields } }`.
 
 Only **tagged errors** (expected failures, `E` in `Effect<A, E, R>`) cross the
-wire, with their own `_tag` and serialisable fields. Defects and interruptions
-never leak details. They become `RpcInternalError`.
+wire, with their own `_tag` and serialisable fields. Defects never leak
+details: they become `RpcInternalError`. A handler that is interrupted (the
+caller cancelled, the player dropped, the resource is stopping) sends no
+response at all; the caller's own timeout or cancellation ends the call.
 
 Errors the protocol itself produces:
 
@@ -62,7 +64,7 @@ Errors the protocol itself produces:
 | `RpcNotFound` | no handler with that name on the host | `name` |
 | `RpcInvalidInput` | input failed the host's schema | `name`, `message` |
 | `RpcRateLimited` | the caller exceeded the handler's rate limit | `name` |
-| `RpcInternalError` | the handler died or was interrupted | `name` |
+| `RpcInternalError` | the handler died (a defect, or a failure that is not a tagged error) | `name` |
 | `RpcTimeout` | raised **locally** by the caller when no response arrives in time | `name`, `timeoutMs` |
 | `RpcInvalidOutput` | raised **locally** by the caller when the response fails its output schema | `name`, `message` |
 
@@ -107,8 +109,9 @@ These are published locally (inside the resource) when the server rejects
 something a client sent:
 
 ```
-{ kind = "invalid_payload" | "rate_limited" | "unknown_rpc",
-  source = <player id>, name = <event or rpc name>, message = <string?> }
+{ kind = "invalid_payload" | "rate_limited" | "unknown_rpc" | "invalid_state",
+  source = <player id; can be absent for invalid_state>, name = <event, rpc or state key>,
+  message = <string?>, bag = <state bag name; invalid_state only> }
 ```
 
 Rivo FX also fires `TriggerEvent("rivo_fx:security", event, resourceName)` so

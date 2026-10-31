@@ -17,6 +17,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y lua5.4
       - name: Unit tests
         run: lua5.4 tests/run.lua
+      - name: llms.txt and llms-full.md match docs/reference
+        run: node scripts/build-docs.mjs --check
       - name: Benchmarks
         run: |
           lua5.4 tests/bench.lua | tee -a "$GITHUB_STEP_SUMMARY"
