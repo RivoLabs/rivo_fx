@@ -1,0 +1,19 @@
+{
+  "Item": { "type": "literal", "values": ["water", "bread", "phone"], "description": "What the shop sells." },
+  "BuyInput": {
+    "type": "struct",
+    "fields": {
+      "item": "Item",
+      "qty": { "type": "int", "min": 1, "max": 10 }
+    }
+  },
+  "Receipt": {
+    "type": "struct",
+    "fields": {
+      "item": "Item",
+      "qty": "int",
+      "paid": "int",
+      "cash": { "type": "int", "description": "Cash left after paying" }
+    }
+  }
+}

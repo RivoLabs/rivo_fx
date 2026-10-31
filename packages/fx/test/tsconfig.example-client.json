@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["@citizenfx/client"],
+    "paths": {
+      "@rivolabs/fx/client": ["../src/client/index.ts"],
+      "@rivolabs/fx/polyfill": ["../src/polyfill.ts"],
+      "effect": ["../node_modules/effect/dist/index.d.ts"]
+    }
+  },
+  "files": ["../../../examples/js_example/src/client.ts"]
+}

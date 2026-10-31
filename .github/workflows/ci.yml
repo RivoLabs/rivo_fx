@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lua:
+    name: Lua tests and types
+    runs-on: ubuntu-24.04
+    env:
+      LUALS_VERSION: 3.19.2
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lua 5.4
+        run: sudo apt-get update && sudo apt-get install -y lua5.4
+      - name: Unit tests
+        run: lua5.4 tests/run.lua
+      - name: Benchmarks
+        run: |
+          lua5.4 tests/bench.lua | tee -a "$GITHUB_STEP_SUMMARY"
+          lua5.4 tests/bench_wake.lua 100 10000 | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Install lua-language-server
+        run: |
+          mkdir -p "$RUNNER_TEMP/luals"
+          curl -sSL "https://github.com/LuaLS/lua-language-server/releases/download/${LUALS_VERSION}/lua-language-server-${LUALS_VERSION}-linux-x64.tar.gz" \
+            | tar xz -C "$RUNNER_TEMP/luals"
+      - name: Type check (types/ and examples)
+        run: '"$RUNNER_TEMP/luals/bin/lua-language-server" --check . --checklevel=Information --check_format=pretty'
+
+  js:
+    name: JS package
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: packages/fx
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: packages/fx/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - name: Typecheck the harness e2e tests (when present)
+        run: if [ -d test/e2e ]; then pnpm typecheck:e2e; fi
+      - run: pnpm build
+      - run: pnpm test
+
+  nui:
+    name: NUI package
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: packages/fx-nui
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: packages/fx-nui/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+
+  cli:
+    name: CLI (rivo-fx)
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: packages/cli
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lua 5.4 (the generated Lua is run against the generated Effect schemas)
+        run: sudo apt-get update && sudo apt-get install -y lua5.4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: packages/cli/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build @rivolabs/fx-nui (bundled by the CLI for the lua-nui template)
+        working-directory: packages/fx-nui
+        run: pnpm install --frozen-lockfile && pnpm build
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime.version": "Lua 5.4",
+  "workspace.library": ["../rivo_fx/types"],
+  "diagnostics.globals": [
+    "fx_version", "game", "lua54", "name", "description", "dependency", "shared_scripts", "server_script",
+    "client_script", "ui_page", "files", "RegisterCommand", "GetPlayerName", "SendNUIMessage"
+  ]
+}

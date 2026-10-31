@@ -1,0 +1,105 @@
+{
+  "name": "@rivolabs/fx",
+  "version": "1.0.0",
+  "description": "Effect for FiveM resources: validated net events, typed RPC, resource lifecycles, convar config and more.",
+  "license": "MIT",
+  "author": "Rivo",
+  "homepage": "https://github.com/RivoLabs/rivo_fx/tree/main/packages/fx#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RivoLabs/rivo_fx.git",
+    "directory": "packages/fx"
+  },
+  "bugs": "https://github.com/RivoLabs/rivo_fx/issues",
+  "keywords": [
+    "fivem",
+    "effect",
+    "typescript",
+    "cfx",
+    "rpc",
+    "schema",
+    "gta5"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "./src/polyfill.ts",
+    "./dist/polyfill.js",
+    "./dist/polyfill.cjs",
+    "./dist/client.js",
+    "./dist/client.cjs"
+  ],
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./server": {
+      "import": {
+        "types": "./dist/server.d.ts",
+        "default": "./dist/server.js"
+      },
+      "require": {
+        "types": "./dist/server.d.cts",
+        "default": "./dist/server.cjs"
+      }
+    },
+    "./client": {
+      "import": {
+        "types": "./dist/client.d.ts",
+        "default": "./dist/client.js"
+      },
+      "require": {
+        "types": "./dist/client.d.cts",
+        "default": "./dist/client.cjs"
+      }
+    },
+    "./polyfill": {
+      "import": {
+        "types": "./dist/polyfill.d.ts",
+        "default": "./dist/polyfill.js"
+      },
+      "require": {
+        "types": "./dist/polyfill.d.cts",
+        "default": "./dist/polyfill.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.server.json && tsc -p tsconfig.client.json && tsc -p test/tsconfig.server.json && tsc -p test/tsconfig.client.json && tsc -p test/tsconfig.example-server.json && tsc -p test/tsconfig.example-client.json",
+    "typecheck:e2e": "tsc -p test/tsconfig.e2e.json",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "effect": "^4.1.0"
+  },
+  "devDependencies": {
+    "@citizenfx/client": "2.0.38004-1",
+    "@citizenfx/server": "2.0.38004-1",
+    "@effect/vitest": "4.1.0",
+    "@msgpack/msgpack": "^3.1.3",
+    "@types/node": "^26.6.6",
+    "effect": "4.1.0",
+    "esbuild": "^0.28.2",
+    "tsup": "^9.0.0",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.5"
+  },
+  "packageManager": "pnpm@12.16.1",
+  "publishConfig": {
+    "access": "public"
+  }
+}

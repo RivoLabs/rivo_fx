@@ -1,0 +1,84 @@
+name: Release
+
+# Push a tag like v1.0.0: checks the versions, builds rivo_fx.zip, creates the
+# GitHub release with the CHANGELOG section as notes, then publishes the npm
+# packages (with provenance) when the NPM_TOKEN secret is set.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    name: GitHub release
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lua 5.4
+        run: sudo apt-get update && sudo apt-get install -y lua5.4
+      - name: Unit tests
+        run: lua5.4 tests/run.lua
+      - name: Tag matches every version
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          grep -q "^version '$v'" fxmanifest.lua || { echo "fxmanifest.lua is not $v"; exit 1; }
+          grep -q "version = '$v'" init.lua || { echo "init.lua is not $v"; exit 1; }
+          for p in packages/fx packages/fx-nui packages/cli; do
+            node -e "const v=require('./$p/package.json').version; if (v !== '$v') { console.error('$p is ' + v); process.exit(1) }"
+          done
+      - name: Build rivo_fx.zip
+        run: |
+          mkdir -p out/rivo_fx
+          cp -r fxmanifest.lua init.lua lib server client shared ui types LICENSE README.md CHANGELOG.md out/rivo_fx/
+          (cd out && zip -qr ../rivo_fx.zip rivo_fx)
+          unzip -l rivo_fx.zip | tail -1
+      - name: Notes from CHANGELOG.md
+        run: |
+          awk -v v="${GITHUB_REF_NAME#v}" '$0 == "## " v { f = 1; next } /^## / { f = 0 } f' CHANGELOG.md > notes.md
+          test -s notes.md || { echo "CHANGELOG.md has no section for ${GITHUB_REF_NAME#v}"; exit 1; }
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" rivo_fx.zip --title "Rivo FX ${GITHUB_REF_NAME#v}" --notes-file notes.md --verify-tag
+
+  npm:
+    name: npm packages
+    needs: release
+    runs-on: ubuntu-24.04
+    env:
+      # Checked under its own name: setup-node puts a placeholder in
+      # NODE_AUTH_TOKEN when no token is set, so that one is never empty.
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: packages/fx/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: Skip without NPM_TOKEN
+        if: env.NPM_TOKEN == ''
+        run: echo "NPM_TOKEN is not set; not publishing to npm."
+      - name: Publish @rivolabs/fx
+        if: env.NPM_TOKEN != ''
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        working-directory: packages/fx
+        run: pnpm install --frozen-lockfile && pnpm build && npm publish --provenance --access public
+      - name: Publish @rivolabs/fx-nui
+        if: env.NPM_TOKEN != ''
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        working-directory: packages/fx-nui
+        run: pnpm install --frozen-lockfile && pnpm build && npm publish --provenance --access public
+      - name: Publish @rivolabs/fx-cli
+        if: env.NPM_TOKEN != ''
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        working-directory: packages/cli
+        run: pnpm install --frozen-lockfile && pnpm build && npm publish --provenance --access public

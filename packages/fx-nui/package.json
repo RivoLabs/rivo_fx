@@ -1,0 +1,57 @@
+{
+  "name": "@rivolabs/fx-nui",
+  "version": "1.0.0",
+  "description": "Typed fetchNui and NUI messages for Rivo FX pages (React, Svelte, Vue or plain JS). No dependencies.",
+  "license": "MIT",
+  "author": "Rivo",
+  "homepage": "https://github.com/RivoLabs/rivo_fx/tree/main/packages/fx-nui#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RivoLabs/rivo_fx.git",
+    "directory": "packages/fx-nui"
+  },
+  "bugs": "https://github.com/RivoLabs/rivo_fx/issues",
+  "keywords": [
+    "fivem",
+    "nui",
+    "cfx",
+    "react",
+    "svelte",
+    "vue"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "tsup": "^9.0.0",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.5"
+  },
+  "packageManager": "pnpm@12.16.1",
+  "publishConfig": {
+    "access": "public"
+  }
+}

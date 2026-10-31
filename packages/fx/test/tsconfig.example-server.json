@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["@citizenfx/server"],
+    "paths": {
+      "@rivolabs/fx/server": ["../src/server/index.ts"],
+      "effect": ["../node_modules/effect/dist/index.d.ts"]
+    }
+  },
+  "files": ["../../../examples/js_example/src/server.ts"]
+}

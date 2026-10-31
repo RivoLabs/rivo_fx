@@ -1,0 +1,57 @@
+{
+  "name": "@rivolabs/fx-cli",
+  "version": "1.0.0",
+  "description": "rivo-fx: generate Lua (Fx.S + LuaLS) and TypeScript (Effect Schema or plain types) from one schema file.",
+  "license": "MIT",
+  "author": "Rivo",
+  "homepage": "https://github.com/RivoLabs/rivo_fx/tree/main/packages/cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RivoLabs/rivo_fx.git",
+    "directory": "packages/cli"
+  },
+  "bugs": "https://github.com/RivoLabs/rivo_fx/issues",
+  "keywords": [
+    "fivem",
+    "codegen",
+    "schema",
+    "lua",
+    "typescript",
+    "cli"
+  ],
+  "type": "module",
+  "bin": {
+    "rivo-fx": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "vendor",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "effect": "4.1.0",
+    "tsup": "^9.0.0",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.5"
+  },
+  "packageManager": "pnpm@12.16.1",
+  "publishConfig": {
+    "access": "public"
+  }
+}

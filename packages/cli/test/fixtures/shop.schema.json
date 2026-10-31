@@ -1,0 +1,26 @@
+{
+  "Rarity": { "type": "literal", "values": ["common", "rare", "legendary"] },
+  "Item": {
+    "type": "struct",
+    "description": "Something the shop sells.",
+    "fields": {
+      "name": { "type": "string", "minLength": 1, "maxLength": 12, "description": "Display name" },
+      "price": { "type": "int", "min": 0, "max": 100000 },
+      "weight": { "type": "number", "min": 0.1 },
+      "rarity": "Rarity",
+      "tags": { "type": "array", "items": "string", "maxItems": 3, "optional": true },
+      "stock-level": { "type": "int", "optional": true }
+    }
+  },
+  "Cart": {
+    "type": "struct",
+    "fields": {
+      "items": { "type": "array", "items": "Item", "minItems": 1, "maxItems": 2 },
+      "coupon": { "type": "union", "of": [{ "type": "string", "minLength": 4 }, { "type": "literal", "values": [false] }], "optional": true },
+      "totals": { "type": "record", "values": "number" },
+      "spot": { "type": "tuple", "items": ["number", "number", "number"] },
+      "meta": { "type": "unknown", "optional": true }
+    }
+  },
+  "Paid": "boolean"
+}
